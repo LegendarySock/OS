@@ -6,3 +6,7 @@ node.name: opensearch-node1
 discovery.type: single-node
 
 cluster.initial_master_nodes: [opensearch-node1]
+
+
+http.host: 0.0.0.0
+http.port: 9600
