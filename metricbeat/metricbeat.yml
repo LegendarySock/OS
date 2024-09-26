@@ -1,0 +1,12 @@
+metricbeat.modules:
+  - module: system
+    period: 10s
+    metricsets:
+      - cpu
+      - memory
+      - network
+      - process
+    enabled: true
+
+output.logstash:
+  hosts: ["http://logstash:5044"]  # Убедитесь, что у вас правильный адрес и порт Logstash
