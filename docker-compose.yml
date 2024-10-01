@@ -1,7 +1,7 @@
-version: '3'
+version: '3.7'
 services:
   opensearch-node1:
-    image: opensearchproject/opensearch:2.3.0
+    image: opensearchproject/opensearch:2
     container_name: opensearch-node1
     environment:
       - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
@@ -14,25 +14,25 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - opensearch-data1:/usr/share/opensearch/data
-      - C:\Users\вард\PycharmProjects\OS\opensearch\opensearch.yml:/usr/share/opensearch/opensearch.yml
+      - C:/Users/U_M22DE/PycharmProjects/OS/opensearch/opensearch.yml:/usr/share/opensearch/opensearch.yml
+      - C:/Users/U_M22DE/PycharmProjects/OS/opensearch/config/opensearch-security/config.yml:/usr/share/opensearch/config/opensearch-security/config.yml
     ports:
       - 9200:9200
       - 9600:9600
- #   networks:
-  #    - opensearch-net
+    networks:
+      - mynetwork
 
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2.3.0
+    image: opensearchproject/opensearch-dashboards:2
     container_name: opensearch-dashboards
     volumes:
-      - C:\Users\вард\PycharmProjects\OS\opensearch_dashboard\opensearch_dashboard.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboard.yml
+      - C:\Users\U_M22DE\PycharmProjects\OS\opensearch_dashboard\opensearch_dashboard.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboard.yml
     ports:
       - 5601:5601
     environment:
       OPENSEARCH_HOSTS: '["http://opensearch-node1:9200"]'
- #   networks:
- #     - opensearch-net
+    networks:
+      - mynetwork
 
   logstash:
     image: opensearchproject/logstash-oss-with-opensearch-output-plugin:latest
@@ -43,8 +43,8 @@ services:
       - 5044:5044
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-##    networks:
- #     - opensearch-net
+    networks:
+      - mynetwork
     depends_on:
       - opensearch-node1
 
@@ -60,11 +60,9 @@ services:
               metricbeat -e -c /usr/share/metricbeat/metricbeat.yml"
     depends_on:
       - opensearch-node1
-  #  networks:
-  #    - opensearch-net
+    networks:
+      - mynetwork
 
-volumes:
-  opensearch-data1:
-
-#networks:
-#  opensearch-net:
+networks:
+  mynetwork:
+    driver: bridge
